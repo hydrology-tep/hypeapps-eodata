@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="application">
+  
+  <jobTemplates>
+    <jobTemplate id="template_hypeapps">
+      <streamingExecutable>/application/node_eodata/run.R</streamingExecutable>
+      <defaultParameters>
+      
+         <parameter id="wlData" type="LiteralData" scope="runtime" title="Water Level Time-series Data, EO or In-situ  (*.csv)" abstract="CSV data from data catalogue (*.csv)" minOccurs="1" maxOccurs="10">-9999</parameter>
+
+         <parameter id="wlSubid" type="LiteralData" scope="runtime" title="Sub-basin identifier - one for each dataset" abstract="SUBID corresponding to the data" minOccurs="1" maxOccurs="10">-9999</parameter>
+
+         <parameter id="wlVariable" type="LiteralData" scope="runtime" title="HYPE Variables - one for each dataset" abstract="HYPE variable names" minOccurs="1" maxOccurs="20">
+          <options>
+ 	     <option>Lake water level altimetry, m, AOWL</option>
+ 	     <option>Lake water level insitu, m, WSTR</option>
+ 	     <default>Lake water level altimetry, m, AOWL</default> 
+          </options>
+         </parameter>
+
+         <parameter id="wlOffset" type="LiteralData" scope="runtime" title="Offset correction - one value for each dataset (m)" abstract="Correction of Water level reference level (m)" minOccurs="1" maxOccurs="10">0</parameter>
+
+
+<!-- The flood mapping data is commented out for now. DG 20170615 -->
+<!-- 
+         <parameter id="flData" type="LiteralData" scope="runtime" title="Flood Map Serive Water Mask Data (*.tif)" abstract="Water mask data from Flood map application in geotiff format">-9999</parameter>
+         <parameter id="flVariable" type="LiteralData" scope="runtime" title="HYPE Xobs Variable Name (4-letter code)" abstract="Xobs variable name, eg. wstr=observed lake water level">-9999</parameter>
+  -->
+      </defaultParameters>
+  
+      <defaultJobconf>
+        <property id="mapred.task.timeout">6000000</property>
+      </defaultJobconf>
+
+    </jobTemplate>
+
+  </jobTemplates>
+
+  <workflow id="workflow" title="Niger-HYPE EO data Pre-processing" abstract="This service allow users to pre-process EO data from the Hydrology TEP EO data processing applications (Water Level and Flood Mapping) to enable assimilation in the hydrological model Niger-HYPE by SMHI. The output from the service can be used as input files to the model (Xobs.txt format).">
+
+    <workflowVersion>1.0</workflowVersion>
+
+    <node id="node_eodata">
+
+      <job id="template_hypeapps"/>
+
+      <sources>
+        <source refid="string:list">input-1</source>
+      </sources>
+
+      <parameters>
+         <parameter id="wlData" type="LiteralData" scope="runtime">-9999</parameter>
+
+         <parameter id="wlSubid" type="LiteralData" scope="runtime">-9999</parameter>
+
+         <parameter id="wlVariable" type="LiteralData" scope="runtime">
+          <options>
+ 	     <option>Lake water level altimetry, m, AOWL</option>
+ 	     <option>Lake water level insitu, m, WSTR</option>
+ 	     <default>Lake water level altimetry, m, AOWL</default> 
+          </options>
+         </parameter>
+           
+         <parameter id="wlOffset" type="LiteralData" scope="runtime">0</parameter>
+
+<!-- The flood mapping data is commented out for now. DG 20170615 -->
+<!-- 
+         <parameter id="flData" type="LiteralData" scope="runtime">-9999</parameter>
+         <parameter id="flVariable" type="LiteralData" scope="runtime">-9999</parameter>
+  -->
+      </parameters>
+
+    </node>
+
+  </workflow>
+
+</application>
