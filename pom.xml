@@ -15,7 +15,7 @@
   <properties>
     <summary>H-TEP Hydrological Modelling Thematic Application - EO data pre-processing</summary>
     <description>H-TEP Hydrological Modelling Thematic Application - EO data pre-processing</description>
-    <community>hydro-tep</community>
+    <community>hydrology-tep</community>
     <yumRepo>hydrology-tep</yumRepo>
   </properties>
   <scm>
