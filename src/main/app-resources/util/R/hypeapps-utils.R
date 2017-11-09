@@ -466,7 +466,7 @@ getHypeAppInput<-function(appName){
       
       # parse the list of input timeXXXX files
       # If xobs !=-9999, parse the input to URLs
-      if(timeFileIN!="-9999"){
+      if(nchar(timeFileIN)>0 & timeFileIN[1]!="-9999"){
         timeFileNum=0
         timeFileURL=NULL
         for(i in 1:length(timeFileIN)){
@@ -665,7 +665,7 @@ getHypeAppInput<-function(appName){
 getHypeAppSetup<-function(modelName,modelBin,tmpDir,appDir,appName,appInput,modelFilesURL,forcingArchiveURL=NULL,stateFilesURL=NULL,stateFilesIN=NULL){
   
   ## model files run directory (for all applications, except returnperiod)
-  if(appName=="historical"|appName=="forecast"|appName=="eodata"){
+  if(appName=="historical"|appName=="forecast"|appName=="eodata"|appName=="returnperiod"){
     modelFilesRunDir=paste(tmpDir,'model',modelName,sep="/")
     dir.create(modelFilesRunDir,recursive = T,showWarnings = F)
   }else{
@@ -696,7 +696,7 @@ getHypeAppSetup<-function(modelName,modelBin,tmpDir,appDir,appName,appInput,mode
   
   # return period run directory
   if(appName=="returnperiod"){
-    returnperiodResDir=paste(tmpDir,"returnperiod",sep="/")
+    returnperiodResDir=paste(modelFilesRunDir,"returnperiod",sep="/")
     dir.create(returnperiodResDir,recursive = T,showWarnings = F)
   }else{
     returnperiodResDir=NULL
