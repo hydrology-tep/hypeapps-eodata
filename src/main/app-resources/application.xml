@@ -6,19 +6,19 @@
       <streamingExecutable>/application/node_eodata/run.R</streamingExecutable>
       <defaultParameters>
       
-         <parameter id="wlData" type="LiteralData" scope="runtime" title="Water Level Time-series Data, EO or In-situ  (*.csv)" abstract="CSV data from data catalogue (*.csv)" minOccurs="1" maxOccurs="10">-9999</parameter>
+         <parameter id="wlData" type="LiteralData" scope="runtime" title="Water Level Time-series Data, EO or In-situ  (*.csv)" abstract="CSV data from data catalogue (*.csv)" minOccurs="0" maxOccurs="10"></parameter>
 
-         <parameter id="wlSubid" type="LiteralData" scope="runtime" title="Sub-basin identifier - one for each dataset" abstract="SUBID corresponding to the data" minOccurs="1" maxOccurs="10">-9999</parameter>
+         <parameter id="wlSubid" type="LiteralData" scope="runtime" title="Sub-basin identifier - at least one, or one for each dataset" abstract="SUBID corresponding to the data" minOccurs="0" maxOccurs="10"></parameter>
 
-         <parameter id="wlVariable" type="LiteralData" scope="runtime" title="HYPE Variables - one for each dataset" abstract="HYPE variable names" minOccurs="1" maxOccurs="20">
+         <parameter id="wlVariable" type="LiteralData" scope="runtime" title="HYPE Variables - at least one, or one for each dataset" abstract="HYPE variable names" minOccurs="1" maxOccurs="10">
           <options>
- 	     <option>Lake water level altimetry, m, AOWL</option>
- 	     <option>Lake water level insitu, m, WSTR</option>
- 	     <default>Lake water level altimetry, m, AOWL</default> 
+    	     <option>Lake water level altimetry (m) AOWL</option>
+ 	         <option>Lake water level insitu (m) WSTR</option>
+ 	         <default>Lake water level altimetry (m) AOWL</default> 
           </options>
          </parameter>
 
-         <parameter id="wlOffset" type="LiteralData" scope="runtime" title="Offset correction - one value for each dataset (m)" abstract="Correction of Water level reference level (m)" minOccurs="1" maxOccurs="10">0</parameter>
+         <parameter id="wlOffset" type="LiteralData" scope="runtime" title="Offset correction - at least one, or one value for each dataset (m)" abstract="Correction of Water level reference level (m)" minOccurs="0" maxOccurs="10">0</parameter>
 
 
 <!-- The flood mapping data is commented out for now. DG 20170615 -->
@@ -49,15 +49,15 @@
       </sources>
 
       <parameters>
-         <parameter id="wlData" type="LiteralData" scope="runtime">-9999</parameter>
+         <parameter id="wlData" type="LiteralData" scope="runtime"></parameter>
 
-         <parameter id="wlSubid" type="LiteralData" scope="runtime">-9999</parameter>
+         <parameter id="wlSubid" type="LiteralData" scope="runtime"></parameter>
 
          <parameter id="wlVariable" type="LiteralData" scope="runtime">
           <options>
- 	     <option>Lake water level altimetry, m, AOWL</option>
- 	     <option>Lake water level insitu, m, WSTR</option>
- 	     <default>Lake water level altimetry, m, AOWL</default> 
+     	     <option>Lake water level altimetry (m) AOWL</option>
+ 	         <option>Lake water level insitu (m) WSTR</option>
+ 	         <default>Lake water level altimetry (m) AOWL</default> 
           </options>
          </parameter>
            
