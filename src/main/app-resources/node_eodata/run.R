@@ -16,7 +16,7 @@
 
 # Application 3: "EO data pre-processing" (hypeapps-eodata)
 # Author:         David Gustafsson, SMHI
-# Version:        2017-09-22
+# Version:        2017-11-08
 
 #################################################################################
 ## 1 - Initialization
@@ -51,6 +51,8 @@ if(app.sys=="tep"){
   source("application/util/R/hypeapps-environment.R")  
   source("application/util/R/hypeapps-utils.R")
 }
+## open application logfile
+logFile=appLogOpen(appName = app.name,tmpDir = getwd())
 #################################################################################
 ## 2 - Application user inputs
 ## ------------------------------------------------------------------------------
@@ -58,6 +60,9 @@ if(app.sys=="tep"){
 app.input <- getHypeAppInput(appName = app.name)
 
 if(app.sys=="tep"){rciop.log ("DEBUG", paste("...hypeapps-eodata input parameters read"), "/node_eodata/run.R")}
+log.res=appLogWrite(logText = "Inputs and parameters read",fileConn = logFile$fileConn)
+
+if(app.input$wlDataInput){
 
 #################################################################################
 ## 3 - Application setup
@@ -72,6 +77,7 @@ app.setup <- getHypeAppSetup(modelName = model.name,
                              modelFilesURL = model.files.url)
 
 if(app.sys=="tep"){rciop.log ("DEBUG", paste("...hypeapps-eodata setup prepared"), "/node_eodata/run.R")}
+log.res=appLogWrite(logText = "Application setup prepared",fileConn = logFile$fileConn)
 
 #################################################################################
 ## 4 - Download and process EO data
@@ -80,12 +86,14 @@ if(app.sys=="tep"){rciop.log ("DEBUG", paste("...hypeapps-eodata setup prepared"
 eo.data <- getEoData(appInput = app.input,
                      appSetup = app.setup)
 if(app.sys=="tep"){rciop.log ("DEBUG", paste("eodata downloaded from catalogue"), "/node_eodata/run.R")}
+log.res=appLogWrite(logText = "eodata downloaded from catalogue",fileConn = logFile$fileConn)
 
 ## -------------------------------------------------------------------------------
 ## Read eodata and prepare data on the Xobs format
 xobs.data <- readEoData(appSetup = app.setup,
                         eoData = eo.data)
 if(app.sys=="tep"){rciop.log ("DEBUG", paste("eodata processed to HYPE xobs format"), "/node_eodata/run.R")}
+log.res=appLogWrite(logText = "eodata processed to HYPE xobs format",fileConn = logFile$fileConn)
 
 #################################################################################
 ## 5 - Write Xobs file and publish
@@ -95,12 +103,24 @@ app.output = writeEoData(appSetup = app.setup,
                          xobsData = xobs.data)
 
 if(app.sys=="tep"){rciop.log ("DEBUG", paste("eodata xobsfile written to output"), "/node_eodata/run.R")}
+log.res=appLogWrite(logText = "eodata xobsfile written to output",fileConn = logFile$fileConn)
 
 
 ## ------------------------------------------------------------------------------
 ## publish postprocessed results
 if(app.sys=="tep"){
   rciop.publish(path=paste(app.output$outDir,"/*",sep=""), recursive=FALSE, metalink=TRUE)
+  log.res=appLogWrite(logText = "application output published",fileConn = logFile$fileConn)
+}
+
+}else{
+  log.res=appLogWrite(logText = "something wrong with application input... application stops",fileConn = logFile$fileConn)
+}
+
+## close and publish the logfile
+log.file=appLogClose(appName = app.name,fileConn = logFile$fileConn)
+if(app.sys=="tep"){
+  rciop.publish(path=logFile$fileName, recursive=FALSE, metalink=TRUE)
 }
 
 ## ------------------------------------------------------------------------------
