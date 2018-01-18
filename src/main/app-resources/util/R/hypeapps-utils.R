@@ -1192,10 +1192,17 @@ analyseTimeOutputData<-function(appSetup,appInput,timeData,appDate){
       
       # analyse file
       returnPeriodMagnitudes(name.in=timeFileIn,name.out=timeFileOut,wl.rp=appInput$returnPeriod,dist="gev")
+      
+      # save list of output files
+      if(i==1){
+        timeFileOutAll=timeFileOut
+      }else{
+        timeFileOutAll=c(timeFileOutAll,timeFileOut)
+      }
     } 
   }
   
-  appOutput=list("outDir"=appSetup$returnperiodResDir)
+  appOutput=list("outDir"=appSetup$returnperiodResDir,"files"=timeFileOutAll)
   
   
   return(appOutput)
@@ -2802,8 +2809,12 @@ prepareHypeAppsOutput<-function(appSetup=NULL,appInput=NULL,modelInput=NULL,mode
 }
 
 # functions for application logfile that will be published as part of application results
-appLogOpen<-function(appName,tmpDir,appDate){
-  fileName=paste(tmpDir,"/","hypeapps-",appName,"_",appDate,".log",sep="")
+appLogOpen<-function(appName,tmpDir,appDate,prefix=NULL){
+  fileName=paste(appDate,"_","hypeapps-",appName,".log",sep="")
+  if(!is.null(prefix)){
+    fileName = paste(prefix,"_",fileName,sep="")
+  }
+  fileName = paste(tmpDir,"/",fileName,sep="")
   fileConn<-file(fileName,open="wt")
   writeLines(paste("hypeapps-",appName," starting, ",as.character(date()),sep=""),fileConn)
   return(list("fileName"=fileName,"fileConn"=fileConn))
