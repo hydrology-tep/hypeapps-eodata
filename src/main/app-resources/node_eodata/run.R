@@ -16,11 +16,14 @@
 
 # Application 3: "EO data pre-processing" (hypeapps-eodata)
 # Author:         David Gustafsson, SMHI
-# Version:        2017-11-08
+# Version:        2018-01-18
 
 #################################################################################
 ## 1 - Initialization
 ## ------------------------------------------------------------------------------
+## create a date tag to include in output filenames
+app.date = format(Sys.time(), "%Y%m%d_%H%M")
+
 ## set application name
 app.name = "eodata"
 ## ------------------------------------------------------------------------------
@@ -52,7 +55,7 @@ if(app.sys=="tep"){
   source("application/util/R/hypeapps-utils.R")
 }
 ## open application logfile
-logFile=appLogOpen(appName = app.name,tmpDir = getwd())
+logFile=appLogOpen(appName = app.name,tmpDir = getwd(),appDate = app.date)
 #################################################################################
 ## 2 - Application user inputs
 ## ------------------------------------------------------------------------------
@@ -100,7 +103,8 @@ log.res=appLogWrite(logText = "eodata processed to HYPE xobs format",fileConn = 
 ## -------------------------------------------------------------------------------
 ## Write eo data in Xobs format
 app.output = writeEoData(appSetup = app.setup,
-                         xobsData = xobs.data)
+                         xobsData = xobs.data,
+                         appDate  = app.date)
 
 if(app.sys=="tep"){rciop.log ("DEBUG", paste("eodata xobsfile written to output"), "/node_eodata/run.R")}
 log.res=appLogWrite(logText = "eodata xobsfile written to output",fileConn = logFile$fileConn)
@@ -109,7 +113,10 @@ log.res=appLogWrite(logText = "eodata xobsfile written to output",fileConn = log
 ## ------------------------------------------------------------------------------
 ## publish postprocessed results
 if(app.sys=="tep"){
-  rciop.publish(path=paste(app.output$outDir,"/*",sep=""), recursive=FALSE, metalink=TRUE)
+  #rciop.publish(path=paste(app.output$outDir,"/*",sep=""), recursive=FALSE, metalink=TRUE)
+  for(k in 1:length(app.output$files)){
+    rciop.publish(path=app.output$files[k], recursive=FALSE, metalink=TRUE)
+  }
   log.res=appLogWrite(logText = "application output published",fileConn = logFile$fileConn)
 }
 
