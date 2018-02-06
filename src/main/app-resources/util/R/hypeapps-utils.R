@@ -974,7 +974,7 @@ readEoData<-function(appSetup,eoData){
 
 ## -------------------------------------------------------------------------------
 ## write eo data in Xobs format
-writeEoData<-function(appSetup,xobsData,appDate){
+writeEoData<-function(appSetup,xobsData,appDate,prefix="001"){
   
   # Create folder for data to be published
   outDir = paste(appSetup$tmpDir,'output',sep="/")
@@ -985,7 +985,7 @@ writeEoData<-function(appSetup,xobsData,appDate){
   subID=as.character(attr(xobsData,"subid")[1])
   
   # output filename
-  xobsFile=paste(outDir,"/Xobs_",varName,"_",subID,"_",appDate,".txt",sep="")
+  xobsFile=paste(outDir,"/",prefix,"_",appDate,"_Xobs_",varName,"_",subID,".txt",sep="")
   
   # write to file
   outres = WriteXobs(xobsData, filename = xobsFile)
@@ -2593,12 +2593,16 @@ prepareHypeAppsOutput<-function(appSetup=NULL,appInput=NULL,modelInput=NULL,mode
         prodTag="forecast"
       }
         
-      # copy log-files from rundir to outdirs
-      hyssLogFile = dir(path = appSetup$runDir , pattern =".log")
-      if(app.sys=="tep"){
-        if(length(hyssLogFile)>=k){
-          file.copy(from = paste(appSetup$runDir,hyssLogFile[k],sep="/"), 
-                    to = paste(outDir[k],paste(prefix.log,prodTag,hyssLogFile[k],sep="_"),sep="/"))
+      # copy log-files from rundir to outdirs (only when k==1)
+      if(k==1){
+        hyssLogFile = dir(path = appSetup$runDir, pattern =".log")
+        if(app.sys=="tep"){
+          if(length(hyssLogFile)>=0){
+            for(j in 1:length(hyssLogFile)){
+              file.copy(from = paste(appSetup$runDir,hyssLogFile[j],sep="/"), 
+                        to = paste(outDir[k],paste(prefix.log,hyssLogFile[j],sep="_"),sep="/"))
+            }
+          }
         }
       }
       
@@ -2769,7 +2773,7 @@ prepareHypeAppsOutput<-function(appSetup=NULL,appInput=NULL,modelInput=NULL,mode
 
 # functions for application logfile that will be published as part of application results
 appLogOpen<-function(appName,tmpDir,appDate,prefix=NULL){
-  fileName=paste("hypeapps-",appName,"_",appDate,".log",sep="")
+  fileName=paste(appDate,"_","hypeapps-",appName,".log",sep="")
   if(!is.null(prefix)){
     fileName = paste(prefix,"_",fileName,sep="")
   }
