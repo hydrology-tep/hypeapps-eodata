@@ -12,9 +12,12 @@
 
          <parameter id="wlVariable" type="LiteralData" scope="runtime" title="HYPE Variables - at least one, or one for each dataset" abstract="HYPE variable names" minOccurs="1" maxOccurs="10">
           <options>
-    	     <option>Lake water level altimetry (m) AOWL</option>
- 	         <option>Lake water level insitu (m) WSTR</option>
- 	         <default>Lake water level altimetry (m) AOWL</default> 
+     	     <option>Lake water level altimetry (m) AOWL</option>
+     	     <option>River water level altimetry (m) AMWL</option>
+             <option>Lake water level in situ (m) WSTR</option>
+             <option>River water level in situ (m) RMWL</option>
+             <option>River water flow in situ (m3s) RMWD</option>
+             <default>Lake water level altimetry (m) AOWL</default> 
           </options>
          </parameter>
 
@@ -56,8 +59,11 @@
          <parameter id="wlVariable" type="LiteralData" scope="runtime">
           <options>
      	     <option>Lake water level altimetry (m) AOWL</option>
- 	         <option>Lake water level insitu (m) WSTR</option>
- 	         <default>Lake water level altimetry (m) AOWL</default> 
+     	     <option>River water level altimetry (m) AMWL</option>
+             <option>Lake water level in situ (m) WSTR</option>
+             <option>River water level in situ (m) RMWL</option>
+             <option>River water flow in situ (m3s) RMWD</option>
+             <default>Lake water level altimetry (m) AOWL</default> 
           </options>
          </parameter>
            
